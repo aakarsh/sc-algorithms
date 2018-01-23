@@ -1,43 +1,26 @@
 package algorithms
 
 import Backtrack._
+import scala.collection.mutable.ListBuffer
 
 object Sets {
 
   def subsets[T] (elements: Array[T]) : List[List[T]] = {
     
-    var results: List[List[T]] = List[List[T]]()
+    var results: ListBuffer[List[T]] = ListBuffer[List[T]]()
     
-    def terminal(input: Array[T], options: Array[Boolean], position: Int): Boolean =
-       return options.length == position
-
+    def filterSelected(input:Array[T], options: List[Boolean]) : List[T] =
+        options.zipWithIndex.filter(_._1 != false).map(x => input(x._2)).toList    
     
-    def generator(input:Array[T], options: Array[Boolean], position: Int) : List[Boolean] = 
-      return List(true,false)
-        
-    def processor(input:Array[T], options: List[Boolean], position: Int) : Boolean = {
-      
-      def getElement(include:Boolean, index:Int) : Option[T] =        
-        return if(include) Some(input(index)) else None
-      
-      def optionalElement(e: Option[T]) : List[T] = e  match {
-          case Some(e) => List(e)
-          case None => Nil
-        }
-      
-      val subset: List[T]= 
-        options.zipWithIndex
-          .map(z => getElement(z._1, z._2))
-          .flatMap(optionalElement).toList
-      
-      results = subset::results
-      return false
+    val termCond : TerminalCond [T,Boolean]  = (_,options,position) => options.length == position
+    val generator: GeneratorFunc[T,Boolean] = (_,_,_) => List(false,true)
+    val process  : ProcessorFunc[T,Boolean] = (input,options,_) => { 
+      results.append(filterSelected(input,options))
+      false
     }
     
-    backtrack(elements,
-        new Array[Boolean](elements.length), 0, 
-        terminal, generator, processor)
+    backtrack(elements, termCond, generator, process)
     
-    return results
+    return results.toList
   }
 }
