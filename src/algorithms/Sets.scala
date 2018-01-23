@@ -2,11 +2,37 @@ package algorithms
 
 import Backtrack._
 import scala.collection.mutable.ListBuffer
+import scala.collection.immutable.HashSet
 
 object Sets {
-
-  def subsets[T] (elements: Array[T]) : List[List[T]] = {
+  
+  def permutations(from:Int , till:Int): List[List[Int]] = {  
     
+    var results: ListBuffer[List[Int]] = ListBuffer[List[Int]]()
+      
+    val termCond : TerminalCond [Int,Int]  =
+      (_,options,position) => options.length == position    
+    
+    val generator: GeneratorFunc[Int,Int]  = (input,options,position) => {      
+      val emptySet = new HashSet[Int]()
+      val selected  = options.take(position).foldLeft(emptySet)(_ + _)
+      input.filter(!selected.contains(_)).toList
+    }
+    
+    val process  : ProcessorFunc[Int,Int] = (_,options,_) => {
+      results.append(options.toList)
+      false
+    }
+    
+    backtrack((from until till).toArray, termCond, generator, process)
+    
+    results.toList
+  }
+  
+  def permute[T] (elements: Array[T]) : List[List[T]] = 
+    permutations(0,elements.length).map(indices => indices.map(elements(_))).toList  
+
+  def subsets[T] (elements: Array[T]) : List[List[T]] = {    
     var results: ListBuffer[List[T]] = ListBuffer[List[T]]()
     
     def filterSelected(input:Array[T], options: List[Boolean]) : List[T] =

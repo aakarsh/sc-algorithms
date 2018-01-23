@@ -34,8 +34,7 @@ object Backtrack {
     }
         
     breakable {
-      for(option <- generator(input,options,position)) {
-        
+      for(option <- generator(input,options,position)) {        
         options(position) = option // save option and proceed backtracking
         val shortCircuit = backtrack_r(input, options, position + 1, terminal, generator, processor)
       
@@ -44,7 +43,7 @@ object Backtrack {
         }
      }
     
-    return false;    
+    return false
   }
   
 }

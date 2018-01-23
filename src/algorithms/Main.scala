@@ -14,7 +14,11 @@ object Main {
     
     for(subset <- subsets(elements)) 
       println("["+subset.mkString(",")+"]")
-    
+      
+    val letters = Array('a','b','c')
+    println("Permutation of: ["+letters.mkString(",")+"]")
+    for(perm <- permute(letters))
+      println("["+perm.mkString(",")+"]")
   }   
   
 }
