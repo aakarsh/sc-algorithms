@@ -5,6 +5,7 @@ import Backtrack._
 import scala.collection.immutable.HashSet
 
 object Graphs {
+  
   val debug = false
   
   trait Graph {    
@@ -17,8 +18,9 @@ object Graphs {
     def vertices = (0 until g.length)
     
     def neighbours(v:Int) :Seq[Int] =  
-      g(v).toList.zipWithIndex.filter({case (hasEdge:Int, index:Int) => hasEdge == 1}).map(_._2)
-      
+      g(v).toList
+      .zipWithIndex
+      .filter({case (hasEdge:Int, index:Int) => hasEdge == 1}).map(_._2)      
   }
  
   def paths(graph: Graph, src:Int, dest:Int) : List[List[Int]] = {
@@ -40,14 +42,12 @@ object Graphs {
     
     val generator: GeneratorFunc[InputType,StateType]  = (_,states) => {
       
-      val prev: Int = 
-        if (states.length == 0) src else states.head
+      val prev: Int = states.head
         
       if(debug)
         printf("Visiting : %d, prev_states : %s \n", prev,states.mkString(","))
-      
-      val visited: HashSet[StateType] = 
-        states.foldLeft(HashSet[StateType](prev))(_+_)
+            
+      val visited: Set[StateType] = states.toSet
         
       if(debug)
         printf("Visited: %s \n", visited.mkString(","))
