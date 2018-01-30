@@ -6,8 +6,7 @@ import scala.reflect.ClassTag
 
 object Backtrack {  
   
-  // reached leaf node
-  
+  // reached leaf node  
   type TerminalCond[T,S]  = (Array[T], List[S]) => Boolean
   
   // perform action on leaf node 
@@ -39,7 +38,8 @@ object Backtrack {
     breakable {
       for(state <- generator(input,states)) {
         
-        val shortCircuit = backtrack(input, state::states, terminal, generator, process)
+        val shortCircuit = 
+          backtrack(input, state::states, terminal, generator, process)
       
         if(shortCircuit) 
           break;        

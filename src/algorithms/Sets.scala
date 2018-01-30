@@ -14,10 +14,10 @@ object Sets {
     
     var results: ListBuffer[List[Int]] = ListBuffer[List[Int]]()
       
-    val termCond : TerminalCond [Int,Int]  =
+    val termCond : TerminalCond [Int, Int]  =
       (input,states) => states.length == input.length    
     
-    val generator: GeneratorFunc[Int,Int]  = (input,states) =>       
+    val generator: GeneratorFunc[Int, Int]  = (input,states) =>       
       input.filter(!states.toSet.contains(_)).toList
         
     val process  : ProcessorFunc[Int,Int] = (_,states) => {
@@ -31,8 +31,7 @@ object Sets {
   }
   
   def permute[T] (elements: Array[T]) : List[List[T]] = 
-    permutations(0,elements.length).map(indices => indices.map(elements(_))).toList  
-
+    permutations(0, elements.length).map(indices => indices.map(elements(_))).toList  
     
   /**
    * Returns the set of all subsets of of elements of array. 

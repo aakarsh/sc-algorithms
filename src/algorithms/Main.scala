@@ -4,11 +4,12 @@ import scala.util.control.Breaks._
 import dp.Numerics._  
 import Sets._
 import Graphs._
+import Sudoku._
 
 object Main {  
     
   def main(args: Array[String]): Unit = {
-    
+    /**
     val elements = Array(1,2,3,4)
     
     println("Subsets of: ["+elements.mkString(",")+"]")
@@ -37,7 +38,21 @@ object Main {
       printf("Paths from %d to %d:\n" , src,dest)
       for (path <- paths(g, src,dest)) 
           println(path)
+      */
     
+      val sudoku = """- - - - - - - 1 2
+                      - - - - 3 5 - - -
+                      - - - 6 - - - 7 -
+                      7 - - - - - 3 - -
+                      - - - 4 - - 8 - - 
+                      1 - - - - - - - -
+                      - - - 1 2 - - - -
+                      - 8 - - - - - 4 -
+                      - 5 - - - - 6 - -"""
+      
+      val s : Sudoku = Sudoku.parse(sudoku);
+      println(s)
+      
   }   
   
 }

@@ -9,21 +9,21 @@ object Graphs {
   val debug = false
   
   trait Graph {    
-    def vertices:Seq[Int] 
+    def vertices: Seq[Int] 
     def neighbours(vertex:Int): Seq[Int]
   }
   
-  implicit class AdjGraph(g:Array[Array[Int]]) extends Graph{
+  implicit class AdjGraph(g: Array[Array[Int]]) extends Graph{
     
     def vertices = (0 until g.length)
     
-    def neighbours(v:Int) :Seq[Int] =  
+    def neighbours(v:Int): Seq[Int] =  
       g(v).toList
       .zipWithIndex
-      .filter({case (hasEdge:Int, index:Int) => hasEdge == 1}).map(_._2)      
+      .filter({ case (hasEdge: Int, index: Int) => hasEdge == 1 }).map(_._2)      
   }
  
-  def paths(graph: Graph, src:Int, dest:Int) : List[List[Int]] = {
+  def paths(graph: Graph, src: Int, dest: Int) : List[List[Int]] = {
         
     var results: ListBuffer[List[Int]] = ListBuffer[List[Int]]()
     
@@ -60,7 +60,7 @@ object Graphs {
       next.toList      
     }
     
-    val process  : ProcessorFunc[InputType,StateType] = (_,path) => {
+    val process: ProcessorFunc[InputType,StateType] = (_,path) => {
       results.append(path.toList)
       false
     }
@@ -68,6 +68,5 @@ object Graphs {
     backtrack(null,List[Int](src), termCond, generator, process)
     
     results.toList
-  }
-  
+  }  
 }
