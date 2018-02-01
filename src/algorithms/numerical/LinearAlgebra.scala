@@ -50,7 +50,7 @@ object LinearAlgebra {
    * 
    * Assumes A is invertible. 
    */
-  def forward_subsitute(b: Array[Double]) : (Matrix, Array[Double]) = {
+  def forward_substitute(b: Array[Double]): (Matrix, Array[Double]) = {
     val U = m.clone()
     val y = b.clone()
     
@@ -68,17 +68,20 @@ object LinearAlgebra {
         // eliminate in y
         y(r) = y(r) + y(p) * scale
         for( c <- p until ncols) {
-          U(r)(c) = U(r)(c) + scale*U(p)(c)
+          U(r)(c) = U(r)(c) + scale * U(p)(c)
         }
       }
     }
     (U,y)
   }
   
-  def backward_subsitute(y: Array[Double]) : Array[Double] = {
+  def backward_substitute(y: Array[Double]): Array[Double] = {
     val x = y.clone
-    for(pivot <- (nrows - 1) to 0 by -1) { // go back by row
-      println("pivot :" + pivot)
+    for( pivot <- (nrows - 1) to 0 by -1 ) { // go back by row.
+        for( r <- (0 to (pivot-1))) {
+          val p = pivot
+          x(r) = x(r) - (m(r)(p) / m(p)(p)) * x(p)
+        }
     }
     x
   }
@@ -93,22 +96,23 @@ object LinearAlgebra {
   override def toString : String  = {
       val nrows = m.length
       val ncols = m(0).length
+      
       val s = new StringBuilder
-      for( i <- 0 until nrows) {
-        
+      for( i <- 0 until nrows) {        
         for(j <- 0 until ncols) {
           s ++= m(i)(j).formatted("%5.2f") +" "    
         }
         s ++= "\n"
       }          
-      s.toString()
+      s.toString
     }
   }
 
   /**
-   *  
+   * 
    */
   def main(args: Array[String]) = {    
+    
     val I:Matrix = Array(Array(1.0 , 0.0   , 0.0),
                          Array(0.0 , 1.0   , 0.0),
                          Array(0.0 , 0.0   , 1.0))
@@ -118,13 +122,19 @@ object LinearAlgebra {
     assert(eq(x, I.multiply(x)) == true)
 
     println(I.multiply(x).toList)
-        
+
     val b = x.clone()
-    val Ub = I.forward_subsitute( b)
+    val Ub = I.forward_substitute( b)
     
-    println("After forward : ")
-    println(Ub._1)
-    println(Ub._2.toList)
+    val U = Ub._1
+    val y = Ub._2
     
-  } 
+    assert(eq(x, U.backward_substitute(y)) == true)
+    
+    println("After forward:")
+    println(U)
+    println(y.toList)
+    
+  }
+  
 }
